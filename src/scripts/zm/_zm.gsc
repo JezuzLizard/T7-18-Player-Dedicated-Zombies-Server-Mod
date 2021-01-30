@@ -767,7 +767,7 @@ function wait_for_all_players_to_move()
 	{
 		count = 0;
 		players = getPlayers();
-		for ( i = 0; i < players.size)
+		for ( i = 0; i < players.size; i++ )
 		{
 			if ( players[ i ].origin != players[ i ].DZM_old_origin )
 			{
@@ -775,11 +775,11 @@ function wait_for_all_players_to_move()
 			}
 		}
 		timeout++;
-		if ( timeout > 1200 )
+		if ( timeout > 120 )
 		{
 			return;
 		}
-		wait( 0.1 );
+		wait( 1 );
 	}
 }
 
