@@ -21,10 +21,24 @@ function init()
 	// see s_nextScriptClientId 
 	level.clientid = 0;
 	level thread manage_bots();
-	level.zombie_ai_limit = getFreeActorCount() - 10;
-	level.zombie_actor_limit = level.zombie_ai_limit;
+	level thread set_vars_spawn();
+	if ( getDvarInt( "DZM_max_zombies_alive" ) != "" )
+	{
+		level.zombie_ai_limit = getDvarInt( "DZM_max_zombies_alive" );
+		level.zombie_actor_limit = level.zombie_ai_limit;
+	}
 	next_map();
 	level thread rotate_map();
+}
+
+function set_vars_spawn()
+{
+	level waittill( "connected", player );
+	player waittill( "spawned_player" );
+	if ( getDvarInt( "DZM_perk_purchase_limit" ) != "" )
+	{
+		level.perk_purchase_limit = getDvarInt( "DZM_perk_purchase_limit" );
+	}
 }
 
 function next_map()
@@ -48,6 +62,11 @@ function next_map()
 
 function rotate_map()
 {
+	map_rotation = getDvarString( "sv_maprotation" );
+	if ( map_rotation == "" )
+	{
+		return;
+	}
 	level waittill( "end_game" );
 	wait( 10 );
 	map( getDvarString( "DZM_next_map" ) );
