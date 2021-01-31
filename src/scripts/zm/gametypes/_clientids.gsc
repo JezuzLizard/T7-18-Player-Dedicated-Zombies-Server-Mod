@@ -21,10 +21,36 @@ function init()
 	// see s_nextScriptClientId 
 	level.clientid = 0;
 	level thread manage_bots();
-	logline1 = "Max Actors: " + getFreeActorCount() + "\n";
-	logprint( logline1 );
 	level.zombie_ai_limit = getFreeActorCount() - 10;
 	level.zombie_actor_limit = level.zombie_ai_limit;
+	next_map();
+	level thread rotate_map();
+}
+
+function next_map()
+{
+	map_rotation = getDvarString( "sv_maprotation" );
+	if ( map_rotation == "" )
+	{
+		return;
+	}
+	index = getDvarInt( "current_map_index" );
+	maps = strTok( map_rotation, " " );
+	index++;
+	if ( index > maps.size )
+	{
+		index = 0;
+	}
+
+	setDvar( "DZM_next_map", maps[ index ] );
+	setDvar( "current_map_index", index );
+}
+
+function rotate_map()
+{
+	level waittill( "end_game" );
+	wait( 10 );
+	map( getDvarString( "DZM_next_map" ) );
 }
 
 function intersection_tracker_disable( player )
@@ -34,8 +60,11 @@ function intersection_tracker_disable( player )
 
 function manage_bots()
 {
-	level waittill( "connected", player );
-	player waittill( "spawned_player" );
+	if ( getDvarInt( "DZM_bots_wait_for_players" ) == 1 )
+	{
+		level waittill( "connected", player );
+		player waittill( "spawned_player" );
+	}
 	wait 5;
 	level.player_intersection_tracker_override = &intersection_tracker_disable;
 	if ( getDvarInt( "DZM_debug" ) == 0 || getDvarInt( "DZM_debug" ) == "" )
