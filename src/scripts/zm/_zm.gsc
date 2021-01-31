@@ -658,7 +658,8 @@ function onAllPlayersReady()
 	
 	/#	println( "ZM >> player_count_expected=" + GetNumExpectedPlayers());		#/
 	player_count_actual = 0;
-	while( player_count_actual < getPlayers().size )
+	players = GetPlayers();
+	while( player_count_actual < players.size || players.size == 0 )
 	{
 		players = GetPlayers();
 		player_count_actual = 0;
