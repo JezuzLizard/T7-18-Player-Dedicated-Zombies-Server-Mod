@@ -1,6 +1,6 @@
 CoD.ScoreboardUtility = {}
-CoD.ScoreboardUtility.MinRowsToShowOnEachTeam = 18
-CoD.ScoreboardUtility.MinRowsToShowOnEachTeamForFFA = 18
+CoD.ScoreboardUtility.MinRowsToShowOnEachTeam = 16
+CoD.ScoreboardUtility.MinRowsToShowOnEachTeamForFFA = 16
 CoD.ScoreboardUtility.GetScoreboardTeamTable = function (f1_arg0, f1_arg1)
 	local f1_local0 = Engine.GetTeamPositions(f1_arg0, Engine.GetCurrentTeamCount())
 	if Engine.GetCurrentTeamCount() < 2 and f1_arg1 == 2 then
