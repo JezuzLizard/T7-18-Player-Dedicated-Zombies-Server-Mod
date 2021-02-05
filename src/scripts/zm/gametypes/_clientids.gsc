@@ -27,8 +27,8 @@ function init()
 		level.zombie_ai_limit = getDvarInt( "DZM_max_zombies_alive" );
 		level.zombie_actor_limit = level.zombie_ai_limit;
 	}
-	next_map();
-	level thread rotate_map();
+	//next_map();
+	//level thread rotate_map();
 }
 
 function set_vars_spawn()
@@ -50,14 +50,13 @@ function next_map()
 	}
 	index = getDvarInt( "current_map_index" );
 	maps = strTok( map_rotation, " " );
-	index++;
 	if ( index > maps.size )
 	{
-		index = 0;
+		index = 1;
 	}
-
-	setDvar( "DZM_next_map", maps[ index ] );
+	index += 2;
 	setDvar( "current_map_index", index );
+	setDvar( "DZM_next_map", maps[ index ] );
 }
 
 function rotate_map()
