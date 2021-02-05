@@ -100,7 +100,7 @@ function Lobby.Process.CreateDedicatedModsLobby(arg0, arg1) -- arg0 is 0
 	lobby.isPrivate = true
 	lobby.isGame = true
 	lobby.isAdvertised = true
-	lobby.maxClients = 18.000000
+	lobby.maxClients = Dvar.com_maxclients:get()
 	lobby.maxLocalClients = 2.000000
 	lobby.maxLocalClientsNetwork = 2.000000
 	lobby.mainMode = Enum.LobbyMainMode.LOBBY_MAINMODE_ZM
