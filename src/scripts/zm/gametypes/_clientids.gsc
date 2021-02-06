@@ -27,8 +27,8 @@ function init()
 		level.zombie_ai_limit = getDvarInt( "DZM_max_zombies_alive" );
 		level.zombie_actor_limit = level.zombie_ai_limit;
 	}
-	//next_map();
-	//level thread rotate_map();
+	next_map();
+	level thread rotate_map();
 }
 
 function set_vars_spawn()
