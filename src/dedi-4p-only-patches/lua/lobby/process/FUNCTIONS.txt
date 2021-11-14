@@ -1,0 +1,92 @@
+//lobbyprocess.lua original
+Lobby.Process.CreateDedicatedModsLobby = function (f8_arg0, f8_arg1)
+	local f8_local0 = Dvar.sv_playlist
+	Engine.SetPlaylistID(f8_local0:get())
+	local f8_local1 = Lobby.Actions.ExecuteScript(function ()
+		Lobby.ProcessNavigate.SetupLobbyMapAndGameType(f8_arg0, f8_arg1)
+	end)
+	local f8_local2 = Lobby.Actions.SetNetworkMode(f8_arg0, Enum.LobbyNetworkMode.LOBBY_NETWORKMODE_LIVE)
+	local f8_local3 = Lobby.Actions.LobbySettings(f8_arg0, f8_arg1)
+	local f8_local4 = Lobby.Actions.UpdateUI(f8_arg0, f8_arg1)
+	local f8_local5 = Lobby.Actions.LobbyHostStart(f8_arg0, f8_arg1.mainMode, f8_arg1.lobbyType, f8_arg1.lobbyMode, f8_arg1.maxClients)
+	local f8_local6 = Lobby.Actions.AdvertiseLobby(true)
+	local f8_local7 = Lobby.Actions.ExecuteScript(function ()
+		Engine.QoSProbeListenerEnable(f8_arg1.lobbyType, true)
+		Engine.SetDvar("live_dedicatedReady", 1)
+		Engine.RunPlaylistRules(f8_arg0)
+		Engine.RunPlaylistSettings(f8_arg0)
+		Lobby.Timer.HostingLobby({controller = f8_arg0, lobbyType = f8_arg1.lobbyType, mainMode = f8_arg1.mainMode, lobbyTimerType = f8_arg1.lobbyTimerType})
+	end)
+	Lobby.Process.AddActions(f8_local2, f8_local3)
+	Lobby.Process.AddActions(f8_local3, f8_local1)
+	Lobby.Process.AddActions(f8_local1, f8_local4)
+	Lobby.Process.AddActions(f8_local4, f8_local5)
+	Lobby.Process.AddActions(f8_local5, f8_local6)
+	Lobby.Process.AddActions(f8_local6, f8_local7)
+	Lobby.Process.AddActions(f8_local7, nil)
+	return {head = f8_local2, interrupt = Lobby.Interrupt.NONE, force = true, cancellable = true}
+end
+
+//lobbyprocess.lua modified
+function Lobby.Process.CreateDedicatedModsLobby(arg0, arg1) -- arg0 is 0 
+	lobby = {}
+	lobby.id = 402.000000
+	lobby.name = "ZMLobbyOnlineCustomGame"
+	lobby.title = "MENU_PRIVATE_GAME_CAPS"
+	lobby.kicker = "MENU_FILESHARE_CUSTOMGAMES"
+	lobby.room = "zm"
+	lobby.isPrivate = true
+	lobby.isGame = true
+	lobby.isAdvertised = true
+	lobby.maxClients = Dvar.com_maxclients:get()
+	lobby.maxLocalClients = 2.000000
+	lobby.maxLocalClientsNetwork = 2.000000
+	lobby.mainMode = Enum.LobbyMainMode.LOBBY_MAINMODE_ZM
+	lobby.networkMode = Enum.LobbyNetworkMode.LOBBY_NETWORKMODE_LIVE
+	lobby.lobbyType = Enum.LobbyType.LOBBY_TYPE_GAME
+	lobby.lobbyMode = Enum.LobbyMode.LOBBY_MODE_CUSTOM
+	lobby.eGameModes = Enum.eGameModes.MODE_GAME_MANUAL_PLAYLIST
+	lobby.lobbyTimerType = LuaEnums.TIMER_TYPE.AUTO_ZM
+	lobby.menuMusic = "zm_frontend"
+	lobby.joinPartyPrivacyCheck = false
+	arg1 = lobby
+	local function __FUNC_1AAC_()
+		Engine.QoSProbeListenerEnable(arg1.lobbyType, true)
+		Engine.SetDvar("live_dedicatedReady", 1.000000)
+		Engine.RunPlaylistRules(arg0)
+		Engine.RunPlaylistSettings(arg0)
+		local registerVal1 = {}
+		registerVal1.controller = arg0
+		registerVal1.lobbyType = arg1.lobbyType
+		registerVal1.mainMode = arg1.mainMode
+		registerVal1.lobbyTimerType = arg1.lobbyTimerType
+		Lobby.Timer.HostingLobby(registerVal1)
+	end
+	local registerVal3 = Dvar.sv_playlist:get()
+	Engine.SetPlaylistID(registerVal3)
+	local function __FUNC_1CD3_()
+		Lobby.ProcessNavigate.SetupLobbyMapAndGameType(arg0, arg1)
+		Engine.Mods_SetMod( "2355704921" )
+	end
+
+	local registerVal5 = Lobby.Actions.ExecuteScript(__FUNC_1CD3_)
+	local registerVal6 = Lobby.Actions.SetNetworkMode(arg0, Enum.LobbyNetworkMode.LOBBY_NETWORKMODE_LIVE)
+	local registerVal7 = Lobby.Actions.LobbySettings(arg0, arg1)
+	local registerVal8 = Lobby.Actions.UpdateUI(arg0, arg1)
+	local registerVal9 = Lobby.Actions.LobbyHostStart(arg0, arg1.mainMode, arg1.lobbyType, arg1.lobbyMode, arg1.maxClients )
+	local registerVal10 = Lobby.Actions.AdvertiseLobby(true)
+	local registerVal11 = Lobby.Actions.ExecuteScript(__FUNC_1AAC_)
+	local registerVal12 = {}
+	registerVal12.head = registerVal6
+	registerVal12.interrupt = Lobby.Interrupt.NONE
+	registerVal12.force = true
+	registerVal12.cancellable = true
+	Lobby.Process.AddActions(registerVal6, registerVal7)
+	Lobby.Process.AddActions(registerVal7, registerVal5)
+	Lobby.Process.AddActions(registerVal5, registerVal8)
+	Lobby.Process.AddActions(registerVal8, registerVal9)
+	Lobby.Process.AddActions(registerVal9, registerVal10)
+	Lobby.Process.AddActions(registerVal10, registerVal11)
+	Lobby.Process.AddActions(registerVal11, nil)
+	return registerVal12
+end

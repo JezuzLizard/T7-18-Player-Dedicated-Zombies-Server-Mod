@@ -1,0 +1,161 @@
+//_zm original
+function onAllPlayersReady()
+{
+	
+	timeOut = GetTime() + 5000;	// 5 second time out.
+	
+	while(IsLoadingCinematicPlaying() || (GetNumExpectedPlayers() == 0  && (GetTime() < timeOut)))
+	{
+		wait(0.1);
+	}
+	
+	player_count_actual = 0;
+	while( (GetNumConnectedPlayers() < GetNumExpectedPlayers()) || (player_count_actual != GetNumExpectedPlayers()) )
+	{
+		players = GetPlayers();
+		player_count_actual = 0;
+		for( i = 0; i < players.size; i++ )
+		{
+			players[i] FreezeControls( true );
+			if( players[i].sessionstate == "playing" )
+			{
+				player_count_actual++;
+			} 
+		}
+	
+		wait( 0.1 );	
+	}
+
+	SetInitialPlayersConnected();
+
+	level flag::set( "all_players_connected" );
+	SetDvar( "all_players_are_connected", "1" );
+
+	//Check to see if we should spawn some bots to help
+	if ( (1 == GetNumConnectedPlayers()) && (GetDvarInt( "scr_zm_enable_bots" )==1) )
+	{
+		level thread add_bots();
+		level flag::set("initial_players_connected");
+	}
+	else
+	{
+		players = GetPlayers();
+		if ( players.size == 1 )
+		{
+			level flag::set( "solo_game" );
+			level.solo_lives_given = 0;
+			foreach ( player in players )
+			{
+				player.lives = 0;
+			}
+			level zm::set_default_laststand_pistol( true );
+		}
+
+		level flag::set("initial_players_connected");
+
+		array::thread_all(GetPlayers(),	&initialBlack);
+		
+		while ( !AreTexturesLoaded() )
+		{
+			WAIT_SERVER_FRAME;
+		}
+
+		//level flag::set( "start_zombie_round_logic" );
+		thread start_zombie_logic_in_x_sec( 3.0 );
+	}
+
+	set_intermission_point();
+	
+	n_black_screen = 5.0;
+	level thread fade_out_intro_screen_zm( n_black_screen, 1.5, true );
+	wait n_black_screen;
+
+	// Reset the start time
+	level.n_gameplay_start_time = GetTime();
+	foreach( player in level.players )
+	{
+		player LUINotifyEvent( &"game_timer_reset", 0 );
+	}
+}
+
+
+//_zm patched
+function onAllPlayersReady()
+{
+	timeOut = GetTime() + 5000;	// 5 second time out.
+	
+	while(IsLoadingCinematicPlaying() || (GetNumExpectedPlayers() == 0  && (GetTime() < timeOut)))
+	{
+		wait(0.1);
+	}
+	
+	/#	println( "ZM >> player_count_expected=" + GetNumExpectedPlayers());		#/
+	player_count_actual = 0;
+	players = GetPlayers();
+	while( player_count_actual < players.size || players.size == 0 )
+	{
+		players = GetPlayers();
+		player_count_actual = 0;
+		for( i = 0; i < players.size; i++ )
+		{
+			players[i] FreezeControls( true );
+			if( players[i].sessionstate == "playing" )
+			{
+				player_count_actual++;
+			} 
+		}
+		wait( 0.1 );	
+	}
+
+	SetInitialPlayersConnected();
+
+	level flag::set( "all_players_connected" );
+	SetDvar( "all_players_are_connected", "1" );
+
+	/#	println( "ZM >> We have all players - START ZOMBIE LOGIC" );	#/
+
+
+	
+	//Check to see if we should spawn some bots to help
+	if ( (1 == GetNumConnectedPlayers()) && (GetDvarInt( "scr_zm_enable_bots" )==1) )
+	{
+		level thread add_bots();
+		level flag::set("initial_players_connected");
+	}
+	else
+	{
+		players = GetPlayers();
+		if ( players.size == 1 )
+		{
+			level flag::set( "solo_game" );
+			level.solo_lives_given = 0;
+			foreach ( player in players )
+			{
+				player.lives = 0;
+			}
+			level zm::set_default_laststand_pistol( true );
+		}
+
+		level flag::set("initial_players_connected");
+
+		array::thread_all(GetPlayers(),	&initialBlack);
+		WAIT_SERVER_FRAME;
+		players = getPlayers();
+		if ( isdefined(level.added_initial_streamer_blackscreen) )
+		{
+			wait(level.added_initial_streamer_blackscreen); 
+		}
+		
+		//level flag::set( "start_zombie_round_logic" );
+		thread start_zombie_logic_in_x_sec( 3.0 );
+	}
+
+	set_intermission_point();
+	
+	n_black_screen = 5.0;
+	level thread fade_out_intro_screen_zm( n_black_screen, 1.5, true );
+	wait n_black_screen;
+	// Reset the start time
+	level.n_gameplay_start_time = GetTime();
+	clientfield::set( "game_start_time", level.n_gameplay_start_time );
+}
