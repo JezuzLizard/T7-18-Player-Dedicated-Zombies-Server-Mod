@@ -1,0 +1,2 @@
+t7-mod.exe +set sv_playlist 1 +set net_port 27018 +set fs_game "2922196999" +set logfile 2 +set live_steam_server_name "Test Server" +set live_steam_server_description "This is a test server." +set live_steam_server_password "" +rcon_password "" %*
+pause
