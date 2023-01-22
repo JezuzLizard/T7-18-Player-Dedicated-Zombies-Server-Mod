@@ -16,4 +16,10 @@ scriptparsetree,scripts/zm/_zm_laststand.gsc
 scriptparsetree,scripts/zm/_zm_laststand.csc
 rawfile,ui/uieditor/menus/hud/t7hud_zm_factory.lua
 rawfile,ui/uieditor/menus/hud/t7hud_zm_dlc5.lua
+rawfile,ui/uieditor/menus/hud/t7hud_zm.lua
+rawfile,ui/uieditor/menus/hud/t7hud_zm_castle.lua
+rawfile,ui/uieditor/menus/hud/t7hud_zm_genesis.lua
+rawfile,ui/uieditor/menus/hud/t7hud_zm_island.lua
+rawfile,ui/uieditor/menus/hud/t7hud_zm_stalingrad.lua
+rawfile,ui/uieditor/menus/hud/t7hud_zm_tomb.lua
 rawfile,ui/uieditor/widgets/scoreboard/cp/scoreboardwidgetcp.lua

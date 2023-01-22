@@ -20,15 +20,12 @@ function init()
 	// this is now handled in code ( not lan )
 	// see s_nextScriptClientId 
 	level.clientid = 0;
-	level thread manage_bots();
 	level thread set_vars_spawn();
-	if ( getDvarInt( "DZM_max_zombies_alive" ) != "" )
+	if ( getDvarInt( "DZM_max_zombies_allowed" ) != "" )
 	{
-		level.zombie_ai_limit = getDvarInt( "DZM_max_zombies_alive" );
+		level.zombie_ai_limit = getDvarInt( "DZM_max_zombies_allowed" );
 		level.zombie_actor_limit = level.zombie_ai_limit;
 	}
-	next_map();
-	level thread rotate_map();
 }
 
 function set_vars_spawn()
@@ -39,80 +36,12 @@ function set_vars_spawn()
 	{
 		level.perk_purchase_limit = getDvarInt( "DZM_perk_purchase_limit" );
 	}
-}
-
-function next_map()
-{
-	map_rotation = getDvarString( "sv_maprotation" );
-	if ( map_rotation == "" )
-	{
-		return;
-	}
-	index = getDvarInt( "current_map_index" );
-	maps = strTok( map_rotation, " " );
-	if ( index > maps.size )
-	{
-		index = 1;
-	}
-	index += 2;
-	setDvar( "current_map_index", index );
-	setDvar( "DZM_next_map", maps[ index ] );
-}
-
-function rotate_map()
-{
-	map_rotation = getDvarString( "sv_maprotation" );
-	if ( map_rotation == "" )
-	{
-		return;
-	}
-	level waittill( "end_game" );
-	wait( 10 );
-	map( getDvarString( "DZM_next_map" ) );
+	level.player_intersection_tracker_override = &intersection_tracker_disable;
 }
 
 function intersection_tracker_disable( player )
 {
 	return 1;
-}
-
-function manage_bots()
-{
-	if ( getDvarInt( "DZM_bots_wait_for_players" ) == 1 )
-	{
-		level waittill( "connected", player );
-		player waittill( "spawned_player" );
-	}
-	wait 5;
-	level.player_intersection_tracker_override = &intersection_tracker_disable;
-	if ( getDvarInt( "DZM_debug" ) == 0 || getDvarInt( "DZM_debug" ) == "" )
-	{
-		return;
-	} 
-	level.manageBots = [];
-	level.currentBots = 0;
-	while ( 1 )
-	{
-		botsToAdd = getDvarInt( "DZM_num_bots_spawn" );
-		for ( i = level.currentBots; i < botsToAdd; i++ )
-		{
-			if ( level.currentBots < botsToAdd )
-			{
-				level.manageBots[ i ] = AddTestClient();	
-				level.currentBots++;
-				level.manageBots[ i ] thread watch_for_disconnect();
-			}
-		}
-		for ( i = level.currentBots; i > 0; i-- )
-		{
-			if ( level.currentBots > botsToAdd )
-			{
-				kick( level.manageBots[ i ] getEntityNumber() );
-				level.currentBots--;
-			}
-		}
-		wait 1;
-	}
 }
 
 function watch_for_disconnect()
