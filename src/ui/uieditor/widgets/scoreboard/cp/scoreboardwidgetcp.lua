@@ -46,9 +46,9 @@ CoD.ScoreboardWidgetCP.new = function (HudRef, InstanceRef)
 	f3_local2:setTopBottom(true, false, 47, 539)
 	local mapname = Engine.GetCurrentMap()
 	if ( mapname == "zm_zod" or mapname == "zm_castle" or mapname == "zm_stalingrad" or mapname == "zm_genesis" or mapname == "zm_tomb" ) then
-		f3_local2.Team1:setVerticalCount(8)
+		f3_local2.Team1:setVerticalCount(12)
 	else 
-		f3_local2.Team1:setVerticalCount(16)
+		f3_local2.Team1:setVerticalCount(18)
 	end
 	f3_local2.Team2:setAlpha(0)
 	f3_local2.Team2:setVerticalCount(1)

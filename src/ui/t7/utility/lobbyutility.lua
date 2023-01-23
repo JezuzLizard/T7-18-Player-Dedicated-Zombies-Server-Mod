@@ -1,7 +1,7 @@
 require( "ui.t7.utility.lobbyutilityog" ) -- Ripped original file from Wraith
 
 function Engine.GetLobbyMaxClients()
-      local max_clients = Dvar.com_maxclients:get()
+      local max_clients = 18
       Engine.SetDvar("sv_maxclients", max_clients)
       Engine.SetDvar("com_maxclients", max_clients)
       Engine.SetLobbyMaxClients(Enum.LobbyType.LOBBY_TYPE_GAME, max_clients)

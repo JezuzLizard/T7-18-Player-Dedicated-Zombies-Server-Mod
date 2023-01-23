@@ -750,38 +750,7 @@ function initialBlackEnd()
 function start_zombie_logic_in_x_sec( time_to_wait )
 {
 	wait( time_to_wait );
-	wait_for_all_players_to_move();
 	level flag::set( "start_zombie_round_logic" );
-}
-
-function wait_for_all_players_to_move()
-{
-	players = getPlayers();
-	for ( i = 0; i < players.size; i++ )
-	{
-		players[ i ].DZM_old_origin = players[ i ].origin;
-	}
-	count = 0;
-	players = getPlayers();
-	timeout = 0;
-	while ( count < players.size )
-	{
-		count = 0;
-		players = getPlayers();
-		for ( i = 0; i < players.size; i++ )
-		{
-			if ( players[ i ].origin != players[ i ].DZM_old_origin )
-			{
-				count++;
-			}
-		}
-		timeout++;
-		if ( timeout > 120 )
-		{
-			return;
-		}
-		wait( 1 );
-	}
 }
 
 function getAllOtherPlayers()

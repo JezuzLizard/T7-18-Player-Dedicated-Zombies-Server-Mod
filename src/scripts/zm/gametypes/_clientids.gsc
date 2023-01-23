@@ -21,7 +21,7 @@ function init()
 	// see s_nextScriptClientId 
 	level.clientid = 0;
 	level thread set_vars_spawn();
-	if ( getDvarInt( "DZM_max_zombies_allowed" ) != "" )
+	if ( getDvarString( "DZM_max_zombies_allowed" ) != "" )
 	{
 		level.zombie_ai_limit = getDvarInt( "DZM_max_zombies_allowed" );
 		level.zombie_actor_limit = level.zombie_ai_limit;
@@ -32,7 +32,7 @@ function set_vars_spawn()
 {
 	level waittill( "connected", player );
 	player waittill( "spawned_player" );
-	if ( getDvarInt( "DZM_perk_purchase_limit" ) != "" )
+	if ( getDvarString( "DZM_perk_purchase_limit" ) != "" )
 	{
 		level.perk_purchase_limit = getDvarInt( "DZM_perk_purchase_limit" );
 	}
